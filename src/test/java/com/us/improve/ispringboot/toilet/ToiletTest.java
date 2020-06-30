@@ -1,5 +1,9 @@
 package com.us.improve.ispringboot.toilet;
 
+import com.us.improve.ispringboot.event.IEvent;
+import com.us.improve.ispringboot.event.converter.IEventConverter;
+import com.us.improve.ispringboot.resolver.IResolver;
+import com.us.improve.ispringboot.signal.ISignal;
 import com.us.improve.ispringboot.toilet.service.IToiletService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -23,6 +27,9 @@ public class ToiletTest {
     @Autowired
     private IToiletService toiletService;
 
+    @Autowired
+    private IResolver<String> resolver;
+
     @Test
     public void test1() {
         Toilet toilet = toiletService.getToiletById(1);
@@ -36,6 +43,15 @@ public class ToiletTest {
         log.info("result: {}", toilet);
 
         toilet.release();
+    }
+
+    @Test
+    public void test2() {
+        String rawData = "0A0101";
+
+        ISignal signal = resolver.resolve(rawData);
+        IEvent event = ((IEventConverter) signal).convert2Event();
+        event.happen();
     }
 
 }
