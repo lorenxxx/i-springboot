@@ -5,6 +5,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
+import java.util.Map;
+
 /**
  * @ClassName ApplicationContextUtil
  * @Desciption Spring应用上下文工具类
@@ -12,7 +15,6 @@ import org.springframework.stereotype.Component;
  * @Date 2020/6/10 3:10 PM
  * @Version 1.0
  **/
-@Component
 public class ApplicationContextUtil implements ApplicationContextAware {
 
     private static ApplicationContext applicationContext;
@@ -22,12 +24,21 @@ public class ApplicationContextUtil implements ApplicationContextAware {
         ApplicationContextUtil.applicationContext = applicationContext;
     }
 
-    public Object getBean(Class clazz) {
+    public static ApplicationContext getApplicationContext() {
+        return ApplicationContextUtil.applicationContext;
+    }
+
+    public static Object getBean(Class clazz) {
         return applicationContext.getBean(clazz);
     }
 
-    public Object getBean(String beanName) {
+    public static Object getBean(String beanName) {
         return applicationContext.getBean(beanName);
+    }
+
+    public static <T> Collection<T> getBeanOfType(Class clazz) {
+        Map<String, T> map = applicationContext.getBeansOfType(clazz);
+        return map.values();
     }
 
 }
